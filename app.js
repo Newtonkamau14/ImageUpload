@@ -1,15 +1,7 @@
 const express = require('express');
-const mongoose = require('mongoose');
 const expressLayouts = require('express-ejs-layouts');
 const app = express();
 const PORT = process.env.PORT || 3000;
-
-
-//Db connection
-mongoose.connect('mongodb://localhost:27017/Imageupload',() => {
-    console.log('Connected to database')
-});
-
 
 
 //Middleware
@@ -20,19 +12,11 @@ app.use(express.static('public'))
 app.use(express.json())
 app.use(express.urlencoded({ extended: false}))
 
+//Db connection
+require('./server/database/database')();
 
-
-//Routes
-
-
-
-//Homepage
-app.get('/',(req,res) => {
-    res.render('pages/home',{
-        title: 'Homepage'
-    })
-})
-
+//Calling routes
+app.use('/',require('./server/router/router'))
 
 //Listening on port
 app.listen(PORT,() => {
